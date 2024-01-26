@@ -13,11 +13,11 @@ COPY ["POCPolymorphicRestApi/POCPolymorphicRestApi.csproj", "POCPolymorphicRestA
 RUN dotnet restore "./POCPolymorphicRestApi/./POCPolymorphicRestApi.csproj"
 COPY . .
 WORKDIR "/src/POCPolymorphicRestApi"
-RUN dotnet build "./POCPolymorphicRestApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./POCPolymorphicRestApi.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./POCPolymorphicRestApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./POCPolymorphicRestApi.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
