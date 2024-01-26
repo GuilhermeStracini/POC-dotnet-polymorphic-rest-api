@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace POCPolymorphicRestApi;
 
+[ExcludeFromCodeCoverage]
 public static class Program
 {
     public static void Main(string[] args)
