@@ -2,6 +2,7 @@
 
 🔬 Proof of Concept of Polymorphic REST API with .NET
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/80f4b3e99057418c853e233d08927c6b)](https://app.codacy.com/gh/GuilhermeStracini/POC-dotnet-polymorphic-rest-api?utm_source=github.com&utm_medium=referral&utm_content=GuilhermeStracini/POC-dotnet-polymorphic-rest-api&utm_campaign=Badge_Grade)
 [![wakatime](https://wakatime.com/badge/github/GuilhermeStracini/POC-dotnet-polymorphic-rest-api.svg)](https://wakatime.com/badge/github/GuilhermeStracini/POC-dotnet-polymorphic-rest-api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e5fbd3f04924d0e61c83/maintainability)](https://codeclimate.com/github/GuilhermeStracini/POC-dotnet-polymorphic-rest-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e5fbd3f04924d0e61c83/test_coverage)](https://codeclimate.com/github/GuilhermeStracini/POC-dotnet-polymorphic-rest-api/test_coverage)
