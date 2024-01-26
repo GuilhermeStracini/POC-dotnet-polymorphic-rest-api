@@ -10,3 +10,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/GuilhermeStracini/POC-dotnet-polymorphic-rest-api)](https://github.com/GuilhermeStracini/POC-dotnet-polymorphic-rest-api)
 
 ---
+
+## Links
+
+- [References](https://blog.guilhermebranco.com.br/)
