@@ -3,13 +3,13 @@ version = 1
 test_patterns = ["Tests/**"]
 
 [[analyzers]]
-name = "docker"
+name = "test-coverage"
 
 [[analyzers]]
 name = "secrets"
 
 [[analyzers]]
-name = "test-coverage"
+name = "csharp"
 
 [[analyzers]]
-name = "csharp"
+name = "docker"
