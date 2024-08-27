@@ -21,7 +21,7 @@ public class WeatherForecastController(ILogger<WeatherForecastController> logger
         "Balmy",
         "Hot",
         "Sweltering",
-        "Scorching"
+        "Scorching",
     };
 
     [HttpGet(Name = "GetWeatherForecast")]
@@ -34,7 +34,7 @@ public class WeatherForecastController(ILogger<WeatherForecastController> logger
             {
                 Date = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)],
             })
             .ToArray();
     }
