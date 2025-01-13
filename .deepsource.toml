@@ -1,10 +1,9 @@
 version = 1
 
-# Uncomment this section when add deep-source.yml workflow to report test coverage
-# test_patterns = ["Tests/**"]
+test_patterns = ["Tests/**"]
 
-# [[analyzers]]
-# name = "test-coverage"
+[[analyzers]]
+name = "test-coverage"
 
 [[analyzers]]
 name = "secrets"
