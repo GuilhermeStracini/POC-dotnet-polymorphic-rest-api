@@ -7,9 +7,14 @@
 [![GitHub license](https://img.shields.io/github/license/GuilhermeStracini/POC-dotnet-polymorphic-rest-api)](https://github.com/GuilhermeStracini/POC-dotnet-polymorphic-rest-api)
 [![GitHub last commit](https://img.shields.io/github/last-commit/GuilhermeStracini/POC-dotnet-polymorphic-rest-api)](https://github.com/GuilhermeStracini/POC-dotnet-polymorphic-rest-api)
 
-🔬 Proof of Concept of a **Polymorphic REST API** with **.NET 8** and ASP.NET Core.
+🔬 Proof of Concept of a **Polymorphic REST API** with **.NET 8** and ASP.NET
+Core.
 
-A polymorphic REST API exposes a single endpoint that accepts and returns objects of a **base type**, while the actual payload can be any of several **derived types**. A **type discriminator** in the JSON (e.g. `"$type": "card"`) tells the serializer which concrete class to bind to, so one contract can serve many shapes of data.
+A polymorphic REST API exposes a single endpoint that accepts and returns
+objects of a **base type**, while the actual payload can be any of several
+**derived types**. A **type discriminator** in the JSON (e.g. `"$type": "card"`)
+tells the serializer which concrete class to bind to, so one contract can serve
+many shapes of data.
 
 ---
 
@@ -39,8 +44,12 @@ A polymorphic REST API exposes a single endpoint that accepts and returns object
 ## Project status
 
 > [!NOTE]
-> The repository currently contains the **ASP.NET Core Web API scaffold** (the `WeatherForecast` sample). It already has hosting, Swagger, Docker, tests and CI in place.
-> The polymorphic endpoints described in [Target design: polymorphism](#target-design-polymorphism) are the **planned** next step and are **not implemented yet**.
+> The repository currently contains the **ASP.NET Core Web API scaffold** (the
+> `WeatherForecast` sample). It already has hosting, Swagger, Docker, tests
+> and CI in place.
+> The polymorphic endpoints described in [Target design:
+> polymorphism](#target-design-polymorphism) are the **planned** next step and
+> are **not implemented yet**.
 
 ```mermaid
 flowchart LR
@@ -62,15 +71,16 @@ flowchart LR
 
 ## Tech stack
 
-| Concern            | Technology                                                                 |
-| ------------------ | -------------------------------------------------------------------------- |
-| Runtime            | .NET 8 (`net8.0`), ASP.NET Core Web API (controllers)                      |
-| API documentation  | Swashbuckle.AspNetCore (Swagger UI in `Development`)                       |
-| Serialization      | `System.Text.Json`                                                         |
-| Containers         | Multi-stage `Dockerfile` (`aspnet:8.0` / `sdk:8.0`), ports `8080` / `8081` |
-| Tests              | xUnit, FluentAssertions, NSubstitute, AutoFixture, Coverlet                |
-| Formatting         | CSharpier (local tool + pre-commit hook + CI linter)                       |
-| Static analysis    | SonarCloud, DeepSource, CodeFactor, Code Climate                           |
+| Concern         | Technology                                          |
+| --------------- | --------------------------------------------------- |
+| Runtime         | .NET 8 (`net8.0`), ASP.NET Core Web API             |
+| API docs        | Swashbuckle.AspNetCore (Swagger UI in Development)  |
+| Serialization   | `System.Text.Json`                                  |
+| Containers      | Multi-stage `Dockerfile`, ports `8080` / `8081`     |
+| Tests           | xUnit, FluentAssertions, NSubstitute, AutoFixture   |
+| Coverage        | Coverlet                                            |
+| Formatting      | CSharpier (local tool, pre-commit hook, CI linter)  |
+| Static analysis | SonarCloud, DeepSource, CodeFactor, Code Climate    |
 
 ---
 
@@ -83,16 +93,16 @@ POC-dotnet-polymorphic-rest-api/
 │   └── POCPolymorphicRestApi/
 │       ├── Controllers/
 │       │   └── WeatherForecastController.cs   # GET /WeatherForecast
-│       ├── Properties/launchSettings.json     # http / https / IIS Express / Docker profiles
-│       ├── Program.cs                         # Host builder + middleware pipeline
+│       ├── Properties/launchSettings.json     # Launch profiles
+│       ├── Program.cs                         # Host + middleware
 │       ├── WeatherForecast.cs                 # Response model
-│       ├── POCPolymorphicRestApi.http         # Ready-to-run HTTP request
+│       ├── POCPolymorphicRestApi.http         # Sample request
 │       └── Dockerfile
 ├── Tests/
 │   ├── Coverlet.runsettings
 │   └── POCPolymorphicRestApi.Tests/
 │       └── Controllers/WeatherForecastControllerTests.cs
-├── .githooks/pre-commit                       # Branch-name check + CSharpier
+├── .githooks/pre-commit                       # Branch name + format
 ├── .config/dotnet-tools.json                  # CSharpier local tool
 └── .github/workflows/                         # CI pipelines
 ```
@@ -106,7 +116,8 @@ flowchart TB
     TESTS -- ProjectReference --> API
     API -- NuGet --> SW[Swashbuckle.AspNetCore]
     API -- NuGet --> CT[VS Containers Tools]
-    TESTS -- NuGet --> X[xUnit · FluentAssertions · NSubstitute · AutoFixture · Coverlet]
+    X[xUnit · FluentAssertions<br/>NSubstitute · AutoFixture<br/>Coverlet]
+    TESTS -- NuGet --> X
 ```
 
 ---
@@ -115,7 +126,8 @@ flowchart TB
 
 ### Request pipeline
 
-`Program.cs` builds a minimal ASP.NET Core host. Every request passes through the middleware below, in this order:
+`Program.cs` builds a minimal ASP.NET Core host. Every request passes through
+the middleware below, in this order:
 
 ```mermaid
 flowchart LR
@@ -132,11 +144,11 @@ flowchart LR
 
 Services registered in the DI container:
 
-| Registration                 | Purpose                                        |
-| ---------------------------- | ---------------------------------------------- |
-| `AddControllers()`           | MVC controllers, model binding, JSON formatter |
-| `AddEndpointsApiExplorer()`  | Endpoint metadata for OpenAPI                  |
-| `AddSwaggerGen()`            | Generates the OpenAPI document                 |
+| Registration                | Purpose                                     |
+| --------------------------- | ------------------------------------------- |
+| `AddControllers()`          | Controllers, model binding, JSON formatter  |
+| `AddEndpointsApiExplorer()` | Endpoint metadata for OpenAPI               |
+| `AddSwaggerGen()`           | Generates the OpenAPI document              |
 
 ### Request lifecycle
 
@@ -207,7 +219,9 @@ classDiagram
 
 ### Temperature conversion graph
 
-`TemperatureC` is drawn from `Random.Shared.Next(-20, 55)`, so it ranges from **-20 °C to 54 °C**. The graph shows what the API returns for `TemperatureF` across that range, next to the exact value (`C × 9/5 + 32`):
+`TemperatureC` is drawn from `Random.Shared.Next(-20, 55)`, so it ranges from
+**-20 °C to 54 °C**. The graph shows what the API returns for `TemperatureF`
+across that range, next to the exact value (`C × 9/5 + 32`):
 
 ```mermaid
 xychart-beta
@@ -231,18 +245,23 @@ xychart-beta
 | 54   | 129                | 129.2    |
 
 > [!TIP]
-> The `(int)` cast truncates toward zero, so the result is often **1 °F off**. It is too low for positive temperatures and too high for negative ones. This comes from the stock template and is harmless for a PoC.
+> The `(int)` cast truncates toward zero, so the result is often **1 °F off**.
+> It is too low for positive temperatures and too high for negative ones. This
+> comes from the stock template and is harmless for a PoC.
 
 ---
 
 ## Target design: polymorphism
 
 > [!IMPORTANT]
-> This section describes the **planned** implementation. It uses the built-in `System.Text.Json` polymorphism support (available since .NET 7), so no extra library is needed. The `Payment` domain below is only an example.
+> This section describes the **planned** implementation. It uses the built-in
+> `System.Text.Json` polymorphism support (available since .NET 7), so no
+> extra library is needed. The `Payment` domain below is only an example.
 
 ### Type hierarchy
 
-The base type is annotated with `[JsonPolymorphic]` and lists every derived type with `[JsonDerivedType]` and its discriminator value:
+The base type is annotated with `[JsonPolymorphic]` and lists every derived type
+with `[JsonDerivedType]` and its discriminator value:
 
 ```csharp
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
@@ -292,7 +311,8 @@ classDiagram
 
 ### Polymorphic request flow
 
-One endpoint accepts the base type, and the runtime type decides how the payload is handled:
+One endpoint accepts the base type, and the runtime type decides how the payload
+is handled:
 
 ```mermaid
 sequenceDiagram
@@ -333,12 +353,13 @@ flowchart TD
 ```
 
 > [!WARNING]
-> `System.Text.Json` expects the `$type` discriminator to be the **first property** in the JSON object by default. Starting with .NET 9 you can turn on `AllowOutOfOrderMetadataProperties` to accept it anywhere.
+> `System.Text.Json` expects the `$type` discriminator to be the **first
+> property** in the JSON object by default. Starting with .NET 9 you can turn
+> on `AllowOutOfOrderMetadataProperties` to accept it anywhere.
 
 ### Example payloads
 
-<details>
-<summary><b>Card payment</b></summary>
+#### Card payment
 
 ```json
 {
@@ -352,10 +373,7 @@ flowchart TD
 }
 ```
 
-</details>
-
-<details>
-<summary><b>Pix payment</b></summary>
+#### Pix payment
 
 ```json
 {
@@ -367,10 +385,7 @@ flowchart TD
 }
 ```
 
-</details>
-
-<details>
-<summary><b>Bank transfer</b></summary>
+#### Bank transfer
 
 ```json
 {
@@ -382,8 +397,6 @@ flowchart TD
   "bic": "AIBKIE2D"
 }
 ```
-
-</details>
 
 ---
 
@@ -402,13 +415,15 @@ cd POC-dotnet-polymorphic-rest-api
 dotnet run --project Src/POCPolymorphicRestApi --launch-profile https
 ```
 
-| Profile       | URLs                                              | Swagger                          |
-| ------------- | ------------------------------------------------- | -------------------------------- |
-| `http`        | `http://localhost:5021`                           | `http://localhost:5021/swagger`  |
-| `https`       | `https://localhost:7258`, `http://localhost:5021` | `https://localhost:7258/swagger` |
-| `IIS Express` | `http://localhost:7324`, SSL `44374`              | `/swagger`                       |
+| Profile       | URLs                                              |
+| ------------- | ------------------------------------------------- |
+| `http`        | `http://localhost:5021`                           |
+| `https`       | `https://localhost:7258`, `http://localhost:5021` |
+| `IIS Express` | `http://localhost:7324` (SSL port `44374`)        |
 
-Try it with the bundled [`POCPolymorphicRestApi.http`](Src/POCPolymorphicRestApi/POCPolymorphicRestApi.http) file, or with curl:
+Swagger UI is served at `/swagger` on any of these URLs.
+
+Try it with the bundled [`.http` file][http-file], or with curl:
 
 ```bash
 curl http://localhost:5021/weatherforecast
@@ -440,7 +455,9 @@ flowchart LR
     F --> E((dotnet<br/>POCPolymorphicRestApi.dll))
 ```
 
-> Swagger UI is only enabled when `ASPNETCORE_ENVIRONMENT=Development`. Add `-e ASPNETCORE_ENVIRONMENT=Development` to `docker run` to get it inside the container.
+> Swagger UI is only enabled when `ASPNETCORE_ENVIRONMENT=Development`. Add
+> `-e ASPNETCORE_ENVIRONMENT=Development` to `docker run` to get it inside the
+> container.
 
 ---
 
@@ -456,7 +473,10 @@ With coverage (Coverlet, OpenCover format):
 dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 ```
 
-The tests use **xUnit** for the runner, **NSubstitute** to mock `ILogger<T>`, and **FluentAssertions** for the assertions. `Program` is marked `[ExcludeFromCodeCoverage]`, so coverage counts only the controller and model code.
+The tests use **xUnit** for the runner, **NSubstitute** to mock `ILogger<T>`,
+and **FluentAssertions** for the assertions. `Program` is marked
+`[ExcludeFromCodeCoverage]`, so coverage counts only the controller and model
+code.
 
 ---
 
@@ -465,7 +485,7 @@ The tests use **xUnit** for the runner, **NSubstitute** to mock `ILogger<T>`, an
 ```mermaid
 flowchart TB
     Dev([Developer]) --> Hook{{pre-commit hook}}
-    Hook -->|branch name matches<br/>feature/, fix/, docs/ ...| CS[dotnet csharpier --check]
+    Hook -->|valid branch<br/>feature/, fix/ ...| CS[csharpier --check]
     Hook -->|invalid branch name| Reject[❌ commit rejected]
     CS --> Push[git push / open PR]
 
@@ -480,14 +500,14 @@ flowchart TB
     Lint & Secrets & Size & Sonar & Deep --> Merge([Ready to merge])
 ```
 
-| Workflow                         | Trigger                 | What it does                                          |
-| -------------------------------- | ----------------------- | ----------------------------------------------------- |
-| `sonar-cloud.yml`                | push, pull_request      | Build, test with coverage, SonarCloud scan            |
-| `deep-source.yml`                | push, pull_request      | Test coverage report to DeepSource                    |
-| `linter.yml`                     | pull_request, manual    | CSharpier formatting check                            |
-| `infisical-secrets-check.yml`    | pull_request, manual    | Scans for leaked secrets                              |
-| `size-label.yml`                 | pull_request            | Labels the PR by diff size                            |
-| `sonarcloud-pixeebot.yml`        | SonarCloud `check_run`  | Sends Sonar results to Pixeebot for automated fixes   |
+| Workflow                      | Trigger         | What it does               |
+| ----------------------------- | --------------- | -------------------------- |
+| `sonar-cloud.yml`             | push, PR        | Build, test, SonarCloud    |
+| `deep-source.yml`             | push, PR        | Coverage to DeepSource     |
+| `linter.yml`                  | PR, manual      | CSharpier format check     |
+| `infisical-secrets-check.yml` | PR, manual      | Scans for leaked secrets   |
+| `size-label.yml`              | PR              | Labels the PR by diff size |
+| `sonarcloud-pixeebot.yml`     | Sonar check run | Pixeebot auto-fixes        |
 
 ---
 
@@ -495,7 +515,8 @@ flowchart TB
 
 1. Enable the repository hooks once: `git config core.hooksPath .githooks`
 2. Restore local tools: `dotnet tool restore`
-3. Name your branch with a conventional prefix: `feature/`, `fix/`, `docs/`, `style/`, `refactor/`, `perf/`, `hotfix/`, `test/`, `chore/` or `create/`
+3. Name your branch with a conventional prefix: `feature/`, `fix/`, `docs/`,
+   `style/`, `refactor/`, `perf/`, `hotfix/`, `test/`, `chore/` or `create/`
 4. Format before committing: `dotnet csharpier .`
 5. Open a pull request against `main`
 
@@ -504,9 +525,14 @@ flowchart TB
 ## Links
 
 - [References](https://blog.guilhermebranco.com.br/)
-- [How to serialize properties of derived classes with System.Text.Json](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/polymorphism)
-- [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+- [Polymorphic serialization with System.Text.Json][stj-polymorphism]
+- [Swashbuckle.AspNetCore][swashbuckle]
 
 ## License
 
 Distributed under the terms of the [LICENSE](LICENSE) file.
+
+[http-file]: Src/POCPolymorphicRestApi/POCPolymorphicRestApi.http
+[swashbuckle]: https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+[stj-polymorphism]:
+https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/polymorphism
